@@ -25,13 +25,6 @@ class WM_OT_ul_measurements_add(Operator):
             ("DIMENSIONS", "Dimensions", "", "SHADING_BBOX", 2),
         ),
     )
-    datablock_type: EnumProperty(
-        name="Target type",
-        items=(
-            ("OBJECT", "Object", ""),
-            ("COLLECTION", "Collection", ""),
-        ),
-    )
     ring_size: EnumProperty(
         name="Format",
         items=(
@@ -70,19 +63,14 @@ class WM_OT_ul_measurements_add(Operator):
 
         layout.prop(self, "type")
 
-        layout.separator()
-
         col = layout.column()
-        col.row().prop(self, "datablock_type", expand=True)
 
-        if self.datablock_type == "OBJECT":
+        if self.type == "RING_SIZE":
             col.alert = not self.object_name
             col.prop_search(self, "object_name", bpy.data, "objects")
         else:
             col.alert = not self.collection_name
             col.prop_search(self, "collection_name", bpy.data, "collections")
-
-        layout.separator()
 
         if self.type == "WEIGHT":
             layout.prop(self, "material")
@@ -101,9 +89,8 @@ class WM_OT_ul_measurements_add(Operator):
         item = context.scene.jewelcraft.measurements.add()
 
         item.type = self.type
-        item.datablock_type = self.datablock_type
 
-        if self.datablock_type == "OBJECT":
+        if self.type == "RING_SIZE":
             if self.object_name:
                 item.object = bpy.data.objects[self.object_name]
         else:
@@ -117,8 +104,7 @@ class WM_OT_ul_measurements_add(Operator):
             item.material_name = mat.name
             item.material_density = mat.density
         elif self.type == "DIMENSIONS":
-            target_name = self.object_name if self.datablock_type == "OBJECT" else self.collection_name
-            item.name = "{} {}".format(target_name, _("Dimensions"))
+            item.name = "{} {}".format(self.collection_name, _("Dimensions"))
             item.x = self.x
             item.y = self.y
             item.z = self.z

@@ -55,11 +55,9 @@ class SCENE_OT_ul_move(Operator):
 # ---------------------------
 
 
-def _serialize(prop):
+def serialize(prop):
     if prop == "asset_libs":
         data.asset_libs_serialize()
-    elif prop == "report_metadata":
-        data.report_metadata_serialize()
 
 
 class WM_OT_ul_add(Operator):
@@ -72,7 +70,7 @@ class WM_OT_ul_add(Operator):
 
     def execute(self, context):
         getattr(context.window_manager.jewelcraft, self.prop).add()
-        _serialize(self.prop)
+        serialize(self.prop)
         return {"FINISHED"}
 
 
@@ -86,7 +84,7 @@ class WM_OT_ul_del(Operator):
 
     def execute(self, context):
         getattr(context.window_manager.jewelcraft, self.prop).remove()
-        _serialize(self.prop)
+        serialize(self.prop)
         return {"FINISHED"}
 
 
@@ -100,7 +98,7 @@ class WM_OT_ul_clear(Operator):
 
     def execute(self, context):
         getattr(context.window_manager.jewelcraft, self.prop).clear()
-        _serialize(self.prop)
+        serialize(self.prop)
         return {"FINISHED"}
 
 
@@ -115,5 +113,5 @@ class WM_OT_ul_move(Operator):
 
     def execute(self, context):
         getattr(context.window_manager.jewelcraft, self.prop).move(self.move_up)
-        _serialize(self.prop)
+        serialize(self.prop)
         return {"FINISHED"}
